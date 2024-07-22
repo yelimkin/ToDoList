@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { db } from '../utils/firebase';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+// import { db } from '../utils/firebase';
+// import { collection, getDocs, addDoc } from 'firebase/firestore';
 import TodoItem from './components/TodoItem';
 
 export default function Home() {
@@ -43,7 +43,7 @@ export default function Home() {
         throw new Error('Failed to add todo');
       }
       setNewTodo('');
-      const data = await response.json();
+      const newTodo = await response.json();
       setTodos((prevTodos) => [...prevTodos, { text: newTodo, completed: false }]);
     } catch (error) {
       console.error(error);
