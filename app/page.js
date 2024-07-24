@@ -1,13 +1,11 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from 'react';
-// import { db } from '../utils/firebase';
-// import { collection, getDocs, addDoc } from 'firebase/firestore';
-import TodoItem from './components/TodoItem';
+// app/page.js
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
-  const [newTodo, setNewTodo] = useState('');
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -19,52 +17,25 @@ export default function Home() {
         const data = await response.json();
         setTodos(data);
       } catch (error) {
-        console.error(error);
+        setError(error.message);
       }
     };
 
     fetchTodos();
   }, []);
 
-  const addTodo = async () => {
-    if (!newTodo.trim()) {
-      alert('Todo text cannot be empty');
-      return;
-    }
-    try {
-      const response = await fetch('/api/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: newTodo }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add todo');
-      }
-      setNewTodo('');
-      const newTodo = await response.json();
-      setTodos((prevTodos) => [...prevTodos, { text: newTodo, completed: false }]);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div>
-      <h1>ToDo List</h1>
-      <input
-        type="text"
-        value={newTodo}
-        onChange={(e) => setNewTodo(e.target.value)}
-        placeholder="New todo"
-      />
-      <button onClick={addTodo}>Add Todo</button>
-      <div>
-        {todos.map((todo, index) => (
-          <TodoItem key={index} todo={todo} />
+      <h1>Todos</h1>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>{todo.text}</li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
