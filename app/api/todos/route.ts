@@ -1,5 +1,5 @@
 // app/api/todos/route.js
-import { db } from '../../../utils/firebase'; // Firebase 초기화 파일을 가져옴
+import { db } from '@/lib/firebaseConfig'; // Firebase 초기화 파일을 가져옴
 import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 export async function GET(request) {
