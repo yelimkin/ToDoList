@@ -12,4 +12,9 @@ export default NextAuth({
   ],
   adapter: FirebaseAdapter(db),
   secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: '/auth/signin', // 로그인 페이지 경로
+    verifyRequest: '/auth/verify-request', // 이메일 인증 요청 후 표시할 페이지
+    error: '/auth/error', // 에러 발생 시 표시할 페이지
+  },
 });
