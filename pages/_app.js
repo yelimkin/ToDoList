@@ -1,14 +1,14 @@
+import { Provider as AuthProvider } from 'next-auth/client';
+import { TodoProvider } from '../components/TodoContext';
 import '../styles/globals.css';
-import { SessionProvider } from 'next-auth/react';
-import { TodoProvider } from '../context/TodoContext';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+function MyApp({ Component, pageProps }) {
   return (
-    <SessionProvider session={session}>
+    <AuthProvider session={pageProps.session}>
       <TodoProvider>
         <Component {...pageProps} />
       </TodoProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }
 

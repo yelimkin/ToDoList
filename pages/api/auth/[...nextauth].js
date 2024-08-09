@@ -1,52 +1,28 @@
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import { FirestoreAdapter } from '@next-auth/firebase-adapter';
-import { db } from '../../../firebaseConfig';
+import Providers from 'next-auth/providers';
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
+import clientPromise from '../../../lib/mongodb';
 
 export default NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    Providers.Credentials({
+      // Add your custom login logic here
+      async authorize(credentials) {
+        const user = { id: 1, name: 'test', email: 'test@example.com' }
+        if (user) {
+          return user;
+        } else {
+          return null;
+        }
+      },
     }),
   ],
-  adapter: FirestoreAdapter(db),
+  adapter: MongoDBAdapter(clientPromise),
   secret: process.env.NEXTAUTH_SECRET,
-  callbacks: {
-    async signIn(user, account, profile, email, credentials) {
-      try {
-        console.log('User:', user);
-        console.log('Account:', account);
-        console.log('Profile:', profile);
-        console.log('Email:', email);
-        console.log('Credentials:', credentials);
-
-        // 사용자 인증 논리 
-        return true;
-
-      } catch (error) {
-        console.error('Sign in error:', error);
-        return false; // 인증 실패 시 false 반환
-      }
-    },
-    async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
-    },
-    async session({ session, user }) {
-      session.user.id = user.id;
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    }
+  session: {
+    jwt: true,
   },
   pages: {
-    signIn: '/auth/signin',
-    verifyRequest: '/auth/verify-request',
-    error: '/auth/error',
+    signIn: '/login',
   },
-  debug: true,
 });
