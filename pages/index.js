@@ -1,11 +1,13 @@
 import { useTodos } from '../components/TodoContext';
 import { useState } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [session] = useSession();
   const { todos, addTodo, toggleTodo, deleteTodo } = useTodos();
   const [text, setText] = useState('');
+  const router = useRouter();
 
   const handleAddTodo = (e) => {
     e.preventDefault();
@@ -18,6 +20,7 @@ export default function Home() {
       <div>
         <h1>Please log in</h1>
         <button onClick={() => signIn()}>Log in</button>
+        <button onClick={() => router.push('/register')}>Sign Up</button>
       </div>
     );
   }
