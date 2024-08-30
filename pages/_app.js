@@ -1,4 +1,4 @@
-import { Provider as AuthProvider } from 'next-auth/client'; // 애플리케이션에서 인증과 관련된 상태를 전역적으로 관리
+import { Provider as AuthProvider } from 'next-auth/react'; // 애플리케이션에서 인증과 관련된 상태를 전역적으로 관리
 import { TodoProvider } from '../components/TodoContext'; // TodoList와 관련된 상태를 관리
 import '../styles/globals.css';
 

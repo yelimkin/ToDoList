@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/react';
 
 const TodoContext = createContext(); // 애플리케이션의 전역 상태를 관리하는 Context 객체 (TodoList와 관련된 데이터를 관리)
 
 export function TodoProvider({ children }) { // 애플리케이션 내에서 전역적으로 사용할 수 있는 TodoList 상태와 함수들을 제공
   const [todos, setTodos] = useState([]); // 현재 사용자의 할 일 목록을 관리하는 상태
-  const [session] = useSession(); // 현재 사용자의 세션 정보 (사용자가 로그인된 상태인지 확인)
+  const { data: session } = useSession(); // 현재 사용자의 세션 정보 (사용자가 로그인된 상태인지 확인)
 
   useEffect(() => {
     if (session) { // 사용자가 로그인된 상태라면

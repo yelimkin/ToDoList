@@ -1,6 +1,6 @@
 import { useTodos } from '../components/TodoContext';
 import { useState } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/client'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
+import { useSession, signIn, signOut } from 'next-auth/react'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
 import { useRouter } from 'next/router'; // 클라이언트 측에서 페이지 이동을 제어 -> 회원가입 페이지로 이동하는 데 사용
 
 export default function Home() {
