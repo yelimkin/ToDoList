@@ -7,11 +7,13 @@ export default function Login() { // 직접 '/login'으로 접근하는 로그�
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signIn('credentials', {
-      redirect: false, // 리다이렉트 없이 현재 페이지에서 처리
+    
+    const res = await signIn('credentials', {
+      redirect: false, // 리다이렉트 없이 현재 페이지에서 처리 
       email,
       password,
     });
+    console.log({res});
   };
 
   return (
