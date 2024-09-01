@@ -17,11 +17,10 @@ export default NextAuth({
         // }
 
         const client = await clientPromise;
-        const db = client.db('tododb');
+        const db = client.db('todo-app');
 
-        const user = await db.collection('todos').findOne({ email: credentials.email });
-
-        if (user && bcrypt.compareSync(credentials.password, user.passwordHash)) { // 비밀번호 비교는 해시 함수로 검증해야 함
+        const user = await db.collection('users').findOne({ email: credentials.email })
+        if (user && bcrypt.compareSync(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
           return user;
         } else {
           return null;
