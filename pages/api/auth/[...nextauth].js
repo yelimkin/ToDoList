@@ -18,12 +18,20 @@ export default NextAuth({
         // }
 
         const client = await clientPromise;
-        const db = client.db('todo-app');
+        const db = client.db('todo-app'); // db 이름 일치하는지 확인하기
 
-        const user = await db.collection('users').findOne({ email: credentials.email })
+        const user = await db.collection('users').findOne({ email: credentials.email }) // db의 컬렉션(테이블) 이름 확인하기
+        
+        if (!user) {
+          console.log('No user found with that email');
+          return null;
+        }
+        
         if (user && await bcrypt.compare(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
+          console.log('Valid password');
           return user;
         } else {
+          console.log('Invalid password');
           return null;
         }
       },

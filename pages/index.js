@@ -1,10 +1,10 @@
 import { useTodos } from '../components/TodoContext';
 import { useState,useEffect } from 'react';
-import { getSession, signIn, signOut } from 'next-auth/react'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
+import { useSession, signIn, signOut } from 'next-auth/react'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
 import { useRouter } from 'next/router'; // 클라이언트 측에서 페이지 이동을 제어 -> 회원가입 페이지로 이동하는 데 사용
 
 export default function Home() {
-  const { data: session } = getSession(); // 사용자가 로그인되어 있는지 여부에 따라 다른 내용을 표시
+  const { data: session, status } = useSession(); // 사용자가 로그인되어 있는지 여부에 따라 다른 내용을 표시
   const { todos, addTodo, toggleTodo, deleteTodo } = useTodos(); // 가져온 할 일 목록과 관련된 상태와 함수들
   const [text, setText] = useState('');
   const router = useRouter();
@@ -16,11 +16,15 @@ export default function Home() {
   };
 
   useEffect(() => {
-  console.log({session})
-  }, [session])
+    console.log({session});
+    console.log({status});
+  }, [session, status]);
+
+  // 세션이 로딩 중일 때 로딩 화면 표시
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
   
-
-
   if (!session) { // 사용자가 로그인되어 있지 않다면, 로그인과 회원가입 화면으로 구성
     return ( 
       <div>

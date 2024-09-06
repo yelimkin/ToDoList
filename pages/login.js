@@ -1,9 +1,11 @@
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Login() { // 직접 '/login'으로 접근하는 로그인 페이지
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +16,13 @@ export default function Login() { // 직접 '/login'으로 접근하는 로그�
       password,
     });
     console.log({res});
+
+    // 로그인 성공 시 res.ok가 true로 설정
+    if (res.ok) {
+      router.push('/');  // 홈 화면으로 리다이렉트
+    } else {
+      console.log('Login failed:', res.error);
+    }
   };
 
   return (
