@@ -4,8 +4,8 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter'; // 인증 정보와
 import clientPromise from '../../../lib/mongodb'; // MongoDB와의 연결 관리
 import bcrypt from 'bcryptjs'; // 비밀번호 검증 : 사용자가 로그인할 때 입력한 비밀번호를 동일한 해시 함수로 변환하고, 데이터베이스에 저장된 해시된 비밀번호와 비교
 
-
 export default NextAuth({
+  debug: true,  // 디버그 모드 활성화
   providers: [ // 애플리케이션에서 사용할 인증 제공자 정의
     CredentialsProvider({ // Credentials 제공자를 사용해 사용자 이름과 비밀번호 기반 인증을 설정
       name: 'Credentials',
@@ -29,6 +29,7 @@ export default NextAuth({
         
         if (user && await bcrypt.compare(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
           console.log('Valid password');
+          console.log({user});
           return user;
         } else {
           console.log('Invalid password');
@@ -43,7 +44,11 @@ export default NextAuth({
     jwt: true, // true로 설정하면 서버 측 세션 저장소를 사용하지 않고, 클라이언트 측에 JWT를 저장
     maxAge: 3600
   },
-cookies: {
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,  // JWT 서명에 사용될 비밀키
+    encryption: true,  // JWT 암호화 설정
+  },
+  cookies: {
     sessionToken: {
       name: `next-auth.session-token`,
       options: {
@@ -54,6 +59,16 @@ cookies: {
       },
     },
   },
+  // callbacks: {
+  //   async jwt(token, user) {
+  //     // 로그인 시 사용자 정보가 있다면 토큰에 추가
+  //     if (user) {
+  //       token.id = user.id;
+  //       token.email = user.email;
+  //     }
+  //     return token;
+  //   },
+  // },
   pages: {
     signIn: '/login', // 사용자가 인증되지 않았을 때 리디렉션될 /login 페이지로 지정
   },
