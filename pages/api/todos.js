@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/client'; // 현재 요청과 연결된 사용자의 세션 정보를 가져오기
+import { getSession } from 'next-auth/react'; // 현재 요청과 연결된 사용자의 세션 정보를 가져오기
 import clientPromise from '../../lib/mongodb'; // MongoDB와의 연결을 관리하는 객체
 
 export default async (req, res) => {

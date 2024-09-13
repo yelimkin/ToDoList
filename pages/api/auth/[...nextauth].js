@@ -27,7 +27,7 @@ export default NextAuth({
           return null;
         }
         
-        if (user && await bcrypt.compare(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
+        if (await bcrypt.compare(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
           console.log('Valid password');
           console.log({user});
           return user;
@@ -41,7 +41,7 @@ export default NextAuth({
   adapter: MongoDBAdapter(clientPromise), // MongoDB 어댑터를 사용하여 NextAuth.js가 인증 정보와 세션 데이터를 MongoDB에 저장
   secret: process.env.NEXTAUTH_SECRET, // JWT(Json Web Token)와 세션 암호화에 사용되는 비밀 키를 정의
   session: { // 세션 관리 방식 정의
-    jwt: true, // true로 설정하면 서버 측 세션 저장소를 사용하지 않고, 클라이언트 측에 JWT를 저장
+    strategy: 'jwt', // true로 설정하면 서버 측 세션 저장소를 사용하지 않고, 클라이언트 측에 JWT를 저장
     maxAge: 3600
   },
   jwt: {
@@ -59,16 +59,24 @@ export default NextAuth({
       },
     },
   },
-  // callbacks: {
-  //   async jwt(token, user) {
-  //     // 로그인 시 사용자 정보가 있다면 토큰에 추가
-  //     if (user) {
-  //       token.id = user.id;
-  //       token.email = user.email;
-  //     }
-  //     return token;
-  //   },
-  // },
+  callbacks: {
+    async jwt({ token, user }) {
+      // 로그인 시 사용자 정보가 있다면 토큰에 추가합니다.
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // 세션에 토큰의 정보를 추가합니다.
+      if (token) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+      }
+      return session;
+    },
+  },
   pages: {
     signIn: '/login', // 사용자가 인증되지 않았을 때 리디렉션될 /login 페이지로 지정
   },
