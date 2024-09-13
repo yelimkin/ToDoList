@@ -9,9 +9,19 @@ export function TodoProvider({ children }) { // 애플리케이션 내에서 전
 
   useEffect(() => {
     if (session) { // 사용자가 로그인된 상태라면
-      fetch('/api/todos') // 서버에서 현재 사용자의 할 일 목록을 가져오기 위해 GET 요청 보내기
-        .then((res) => res.json()) // 서버로부터 받은 응답을 JSON 형태로 변환
-        .then((data) => setTodos(data)); // 서버로부터 받은 할 일 목록 데이터를 todos 상태에 저장
+      fetch('/api/todos', {
+        credentials: 'include', // 또는 'same-origin' 사용 가능
+      }) // 서버에서 현재 사용자의 할 일 목록을 가져오기 위해 GET 요청 보내기
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('네트워크 응답에 문제가 있습니다.');
+          }
+          return res.json();
+        }) // 서버로부터 받은 응답을 JSON 형태로 변환
+        .then((data) => setTodos(data)) // 서버로부터 받은 할 일 목록 데이터를 todos 상태에 저장
+        .catch((error) => {
+          console.error('할 일 목록을 가져오는 중 에러 발생', error);
+        });
     }
   }, [session]);
 
@@ -21,6 +31,7 @@ export function TodoProvider({ children }) { // 애플리케이션 내에서 전
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({ text }),
     });
     const newTodo = await res.json();

@@ -48,7 +48,7 @@ export default function Home() {
         />
         <button type="submit">Add Todo</button>
       </form>
-      <ul> {/* 할 일 목록 */}
+      <ul>
         {todos.map((todo) => ( // todos 배열을 반복하여 각 할 일을 리스트 항목으로 렌더링
           <li key={todo._id}>
             <span

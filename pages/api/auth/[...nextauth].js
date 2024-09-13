@@ -4,7 +4,7 @@ import { MongoDBAdapter } from '@next-auth/mongodb-adapter'; // 인증 정보와
 import clientPromise from '../../../lib/mongodb'; // MongoDB와의 연결 관리
 import bcrypt from 'bcryptjs'; // 비밀번호 검증 : 사용자가 로그인할 때 입력한 비밀번호를 동일한 해시 함수로 변환하고, 데이터베이스에 저장된 해시된 비밀번호와 비교
 
-export default NextAuth({
+export const authOptions = {
   debug: true,  // 디버그 모드 활성화
   providers: [ // 애플리케이션에서 사용할 인증 제공자 정의
     CredentialsProvider({ // Credentials 제공자를 사용해 사용자 이름과 비밀번호 기반 인증을 설정
@@ -80,4 +80,6 @@ export default NextAuth({
   pages: {
     signIn: '/login', // 사용자가 인증되지 않았을 때 리디렉션될 /login 페이지로 지정
   },
-});
+}
+
+export default NextAuth(authOptions);
