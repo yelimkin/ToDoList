@@ -8,60 +8,109 @@ export function TodoProvider({ children }) { // 애플리케이션 내에서 전
   const { data: session } = useSession(); // 현재 사용자의 세션 정보 (사용자가 로그인된 상태인지 확인)
 
   useEffect(() => {
-    if (session) { // 사용자가 로그인된 상태라면
-      fetch('/api/todos', {
-        credentials: 'include', // 또는 'same-origin' 사용 가능
-      }) // 서버에서 현재 사용자의 할 일 목록을 가져오기 위해 GET 요청 보내기
-        .then((res) => {
+    let isMounted = true;
+
+    const fetchTodos = async () => {
+      if (session) {
+        try {
+          const res = await fetch('/api/todos', {
+            credentials: 'include',
+          });
           if (!res.ok) {
-            throw new Error('네트워크 응답에 문제가 있습니다.');
+            throw new Error('할 일 목록을 가져오는데 실패했습니다.');
           }
-          return res.json();
-        }) // 서버로부터 받은 응답을 JSON 형태로 변환
-        .then((data) => setTodos(data)) // 서버로부터 받은 할 일 목록 데이터를 todos 상태에 저장
-        .catch((error) => {
-          console.error('할 일 목록을 가져오는 중 에러 발생', error);
-        });
-    }
+          const data = await res.json();
+          if (isMounted) {
+            setTodos(data);
+          }
+        } catch (error) {
+          console.error('할 일 목록을 가져오는 중 에러 발생:', error);
+        }
+      } else {
+        // 세션이 없으면 할 일 목록을 비웁니다.
+        setTodos([]);
+      }
+    };
+
+    fetchTodos();
+
+    return () => {
+      isMounted = false;
+    };
   }, [session]);
 
   const addTodo = async (text) => { // 할 일(text) 추가 함수
-    const res = await fetch('/api/todos', { // '/api/todos' 엔드포인트로 POST 요청을 보내 새 할 일을 추가
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ text }),
-    });
-    const newTodo = await res.json();
-    setTodos([...todos, newTodo]); // 새로운 할 일을 기존 todos 배열에 추가하여 상태를 업데이트
+    try {
+      const res = await fetch('/api/todos', { // '/api/todos' 엔드포인트로 POST 요청을 보내 새 할 일을 추가
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ text }),
+      });
+
+      if (!res.ok) {
+        throw new Error('할 일을 추가하는데 실패했습니다.');
+      }
+
+      const newTodo = await res.json();
+      setTodos((prevTodos) => [...prevTodos, newTodo]); // 새로운 할 일을 기존 todos 배열에 추가하여 상태를 업데이트
+    } catch(error) {
+      console.error('할 일 추가 중 에러 발생:', error);
+    }
   };
 
   const toggleTodo = async (id) => { // 특정 할 일의 완료 상태 변경 함수
     const todo = todos.find((todo) => todo._id === id); // 특정 할 일 찾기
-    const res = await fetch('/api/todos', { // '/api/todos' 엔드포인트로 PUT 요청
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id, completed: !todo.completed }), // 해당 할 일의 completed 상태를 반전
-    });
-    if (res.ok) { // 상태가 성공적으로 업데이트되면 todos 배열을 업데이트
-      setTodos(todos.map((todo) => (todo._id === id ? { ...todo, completed: !todo.completed } : todo)));
+    if (!todo) return;
+
+    try {
+      const res = await fetch('/api/todos', { // '/api/todos' 엔드포인트로 PUT 요청
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ id, completed: !todo.completed }), // 해당 할 일의 completed 상태를 반전
+      });
+
+      if (!res.ok) {
+        throw new Error('할 일 상태를 변경하는데 실패했습니다.');
+      }
+
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) =>
+          todo._id === id ? { ...todo, completed: !todo.completed } : todo
+        )
+      );
+    } catch(error) {
+      console.error('할 일 상태 변경 중 에러 발생:', error);
     }
+    
   };
 
   const deleteTodo = async (id) => { // 특정 할 일 삭제 함수
-    const res = await fetch('/api/todos', { // '/api/todos' 엔드포인트로 DELETE 요청을 보내 특정 할 일을 삭제
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id }), // 삭제할 특정 할 일
-    });
-    if (res.ok) { // 삭제가 성공적으로 이루어지면 todos 배열에서 해당 할 일을 제거하고 상태를 업데이트
-      setTodos(todos.filter((todo) => todo._id !== id)); 
+    try {
+      const res = await fetch('/api/todos', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 세션 쿠키 포함
+        body: JSON.stringify({ id }),
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || '삭제 요청 실패');
+      }
+  
+      // 서버로부터 성공적인 응답을 받았을 때 상태 업데이트
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+    } catch (error) {
+      console.error('할 일 삭제 중 에러 발생:', error);
+      // 필요에 따라 사용자에게 에러 메시지를 표시합니다.
     }
   };
 
