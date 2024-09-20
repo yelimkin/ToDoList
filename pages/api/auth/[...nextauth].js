@@ -10,30 +10,21 @@ export const authOptions = {
     CredentialsProvider({ // Credentials 제공자를 사용해 사용자 이름과 비밀번호 기반 인증을 설정
       name: 'Credentials',
       async authorize(credentials) { // 사용자가 입력한 인증 정보를 검증하는 역할
-        // const user = { id: 1, name: 'test', email: 'test@example.com', password: '1111' };
-        // if (user) {
-        //   return user;
-        // } else {
-        //   return null;
-        // }
-
         const client = await clientPromise;
         const db = client.db('todo-app'); // db 이름 일치하는지 확인하기
 
         const user = await db.collection('users').findOne({ email: credentials.email }) // db의 컬렉션(테이블) 이름 확인하기
         
         if (!user) {
-          console.log('No user found with that email');
-          return null;
+          throw new Error('No user found with that email');
         }
         
         if (await bcrypt.compare(credentials.password, user.password)) { // 비밀번호 비교는 해시 함수로 검증해야 함
           console.log('Valid password');
-          console.log({user});
           return user;
         } else {
           console.log('Invalid password');
-          return null;
+          throw new Error('Invalid password');
         }
       },
     }),

@@ -30,7 +30,7 @@ export default function Register() {
   return (
     <div className="grid min-h-screen place-items-center">
       <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
-        <h1 className="text-xl font-semibold">TodoList, <span className="font-normal">please fill in your information to continue.</span></h1>
+        <h1 className="text-xl font-semibold">TodoList, <br></br> <span className="font-normal">please fill in your information to continue.</span></h1>
         <form onSubmit={handleSubmit} className="mt-6">
           <label htmlFor="email" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">E-mail</label>
           <input 
@@ -44,7 +44,7 @@ export default function Register() {
             onChange={(e) => setEmail(e.target.value)}
             required 
           />
-          <label htmlFor="password" class="block mt-2 text-xs font-semibold text-gray-600 uppercase">Password</label>
+          <label htmlFor="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Password</label>
           <input 
             id="password" 
             type="password" 
@@ -56,9 +56,10 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             required 
           />
-          <button type="submit" class="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
-            Sign up
+          <button type="submit" className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
+            Register
           </button>
+          <p className="flex justify-between inline-block mt-4 text-xs text-red-500 cursor-pointer hover:text-black">{error}</p>
         </form>
       </div>
     </div>

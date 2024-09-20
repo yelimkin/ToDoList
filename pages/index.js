@@ -1,5 +1,5 @@
 import { useTodos } from '../components/TodoContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
 import { useRouter } from 'next/router'; // 클라이언트 측에서 페이지 이동을 제어 -> 회원가입 페이지로 이동하는 데 사용
 
@@ -15,11 +15,6 @@ export default function Home() {
     setText('');
   };
 
-  useEffect(() => {
-    console.log({session});
-    console.log({status});
-  }, [session, status]);
-
   // 세션이 로딩 중일 때 로딩 화면 표시
   if (status === 'loading') {
     return <div>Loading...</div>;
@@ -29,13 +24,13 @@ export default function Home() {
     return ( 
       <div className="grid min-h-screen place-items-center">
         <div className="w-11/12 p-12 bg-white sm:w-8/12 md:w-1/2 lg:w-5/12">
-          <h1 className="text-5xl font-semibold">TodoList, <span className="font-normal">please log in.</span></h1>
+          <h1 className="text-5xl font-semibold">TodoList, <br></br> <span className="font-normal">please log in.</span></h1>
           <div className="mt-6">
             <button onClick={() => signIn()} className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
               Log In
             </button> {/* NextAuth.js의 signIn 함수를 호출하여 로그인 페이지로 이동 */}
             <button onClick={() => router.push('/register')} className="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
-              Sign Up
+              Register
             </button> {/* '/register' 경로로 이동하여 회원가입 페이지로 이동 */}
           </div>
         </div>

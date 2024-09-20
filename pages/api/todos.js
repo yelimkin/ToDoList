@@ -1,4 +1,3 @@
-// import { useSession } from 'next-auth/react'; // 현재 요청과 연결된 사용자의 세션 정보를 가져오기
 import { getServerSession } from 'next-auth'; // 서버 사이드에서 세션 정보를 가져오는 함수
 import { authOptions } from './auth/[...nextauth]'; // NextAuth 설정 가져오기
 import clientPromise from '../../lib/mongodb'; // MongoDB와의 연결을 관리하는 객체
