@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Home from '../pages/index'; // index.js 페이지 컴포넌트
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -15,7 +16,7 @@ useTodos.mockReturnValue({
   deleteTodo: jest.fn(),
 });
 
-describe('Home page', () => {
+describe('Home page', () => { // 로그인 상태에 따른 UI 렌더링 검증 : 인증되지 않은 상태에서 로그인 버튼이 표시되는지 확인
   test('renders login button when not authenticated', () => {
     useSession.mockReturnValueOnce({ data: null, status: 'unauthenticated' });
 
@@ -25,7 +26,7 @@ describe('Home page', () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  test('renders todos when authenticated', () => {
+  test('renders todos when authenticated', () => { // 인증된 상태에서 투두 리스트 렌더링 검증 : 인증된 사용자에게 투두 아이템이 올바르게 표시되는지 확인
     useSession.mockReturnValueOnce({ data: { user: { name: 'Test User' } }, status: 'authenticated' });
 
     render(<Home />);
@@ -34,7 +35,7 @@ describe('Home page', () => {
     expect(todoText).toBeInTheDocument();
   });
 
-  test('calls addTodo when form is submitted', () => {
+  test('calls addTodo when form is submitted', () => { // 폼 제출 시 동작 검증 : 새로운 투두 아이템을 추가할 때 addTodo 함수가 올바르게 호출되는지 확인
     useSession.mockReturnValueOnce({ data: { user: { name: 'Test User' } }, status: 'authenticated' });
 
     const mockAddTodo = jest.fn();

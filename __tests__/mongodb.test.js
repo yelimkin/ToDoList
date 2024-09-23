@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import clientPromise from '../lib/mongodb';
 import { MongoClient } from 'mongodb';
 

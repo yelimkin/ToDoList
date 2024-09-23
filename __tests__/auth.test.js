@@ -1,11 +1,19 @@
+/**
+ * @jest-environment node
+ */
+
 import NextAuth from 'next-auth';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import clientPromise from '../../lib/mongodb'; // MongoDB 연결
+import clientPromise from '../lib/mongodb'; // MongoDB 연결
 import bcrypt from 'bcryptjs';
 import { authOptions } from '../pages/api/auth/[...nextauth]';
 
-jest.mock('../../lib/mongodb');
+jest.mock('../lib/mongodb');
 jest.mock('bcryptjs');
+
+console.log('__dirname:', __dirname);
+console.log('__filename:', __filename);
+
 
 describe('NextAuth authentication', () => {
   test('authorizes valid credentials', async () => {
