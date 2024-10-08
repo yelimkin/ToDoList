@@ -2,6 +2,7 @@ import { useTodos } from '../components/TodoContext';
 import { useState } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react'; // { 사용자 세션 정보 가져오기, 사용자 로그인, 사용자 로그아웃 }
 import { useRouter } from 'next/router'; // 클라이언트 측에서 페이지 이동을 제어 -> 회원가입 페이지로 이동하는 데 사용
+import * as Sentry from "@sentry/nextjs";
 
 export default function Home() {
   const { data: session, status } = useSession(); // 사용자가 로그인되어 있는지 여부에 따라 다른 내용을 표시
@@ -13,6 +14,14 @@ export default function Home() {
     e.preventDefault(); // 기본 폼 제출 동작을 막아 페이지가 새로고침되지 않게 하기
     addTodo(text);
     setText('');
+  };
+
+  const throwError = () => { // 페이지에서 버튼 클릭 시 에러를 발생
+    try {
+      throw new Error("This is a test error for Sentry!");
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   };
 
   // 세션이 로딩 중일 때 로딩 화면 표시
@@ -81,6 +90,7 @@ export default function Home() {
           ))}
         </ul>
       </div>
+      <button onClick={throwError}>error</button>
     </div>
   );
 }
