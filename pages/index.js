@@ -90,7 +90,7 @@ export default function Home() {
           ))}
         </ul>
       </div>
-      <button onClick={throwError}>error</button>
+      {/* <button onClick={throwError}>error</button> */}
     </div>
   );
 }
