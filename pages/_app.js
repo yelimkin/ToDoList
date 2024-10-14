@@ -12,7 +12,7 @@ import Layout from '../components/Layout';
 
 function App({ Component, session, ...pageProps }) { // 모든 페이지의 공통 레이아웃을 정의 ({ 현재 렌더링할 페이지 컴포넌트, 해당 페이지 컴포넌트에 전달할 초기 props }) 
   return (  
-    <>
+    <div>
       <Script
         id="hotjar-script"
         strategy="afterInteractive"
@@ -21,8 +21,8 @@ function App({ Component, session, ...pageProps }) { // 모든 페이지의 공�
             (function(h,o,t,j,a,r){
               h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
               h._hjSettings={hjid:${process.env.NEXT_PUBLIC_HOTJAR_ID},hjsv:${process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION}};
-              a=o.getElementsByTagName('head')[0];
-              r=o.createElement('script');r.async=1;
+              a=o.getElementsByTagName('div')[0];
+              r=o.createElement('Script');r.async=1;
               r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
               a.appendChild(r);
             })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
@@ -36,7 +36,7 @@ function App({ Component, session, ...pageProps }) { // 모든 페이지의 공�
           </Layout>
         </TodoProvider>
       </SessionProvider>
-    </>  
+    </div>  
     
   );
   // -> AuthProvider에서 인증 상태 전역 관리
