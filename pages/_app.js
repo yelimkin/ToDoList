@@ -11,6 +11,17 @@ import Layout from '../components/Layout';
 // const isProduction = process.env.NODE_ENV === 'production';
 
 function App({ Component, session, ...pageProps }) { // 모든 페이지의 공통 레이아웃을 정의 ({ 현재 렌더링할 페이지 컴포넌트, 해당 페이지 컴포넌트에 전달할 초기 props }) 
+  useEffect(() => {
+    console.log('Hotjar ID:', process.env.NEXT_PUBLIC_HOTJAR_ID);
+    console.log('Hotjar Version:', process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION);
+    if (process.env.NODE_ENV === 'production') {
+      hotjar.initialize(
+        process.env.NEXT_PUBLIC_HOTJAR_ID,
+        process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION
+      );
+    }
+  }, []);
+  
   return (  
     <div>
       <Script
