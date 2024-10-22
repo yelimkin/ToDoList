@@ -1,9 +1,9 @@
-<<<<<<< HEAD
 # ToDoList
 =======
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+- 각 사용자의 할 일 목록 웹 앱 
 
-## Getting Started
+## 프로젝트 소개
+
 
 First, run the development server:
 
