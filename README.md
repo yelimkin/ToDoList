@@ -9,10 +9,10 @@
   - 회원가입/로그인/로그아웃 기능 익히기
  
 ## ⚙️ 개발 환경
-- 프레임워크 : <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Next.js</title><path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z"/></svg>
-- DB :
+- 프레임워크 : <img src="https://img.shields.io/badge/Nextjs-000000?style=flat&logo=nextdotjs&logoColor=white"/>
+- DB : <img src="https://img.shields.io/badge/mongodb-47A248?style=flat&logo=mongodb&logoColor=white"/>
 - 인증 : 
-- 스타일링 :
+- 스타일링 : <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
 - IDE :
 - 배포 : 
 
