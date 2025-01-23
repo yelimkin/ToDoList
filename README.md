@@ -20,7 +20,7 @@
   
 - DB : ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
   
-- 인증 :
+- 인증 : NextAuth
   
 - 스타일링 : ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
